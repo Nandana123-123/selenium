@@ -1,6 +1,6 @@
-package com.examplee.SeleniumLocalWebTest___2;
+package com.examplee.SeleniumLocalWebTest__2;
 
-import java.io.File;
+import java.net.URL;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 public class LocalLoginTest {
     WebDriver driver;
-    
+
     @BeforeMethod
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
@@ -23,9 +23,12 @@ public class LocalLoginTest {
 
         driver = new ChromeDriver(options);
 
-        // Absolute file path resolving correctly on Windows (Eclipse) and Linux (GitHub Actions)
-        File file = new File(System.getProperty("user.dir") + File.separator + "webpage" + File.separator + "login.html");
-        driver.get(file.toURI().toString());
+        // Loads login.html cleanly from target/classes/ on both local machine and GitHub Actions
+        URL resource = getClass().getClassLoader().getResource("webpage/login.html");
+        if (resource == null) {
+            throw new IllegalArgumentException("login.html not found in src/main/resources/webpage/");
+        }
+        driver.get(resource.toString());
     }
 
     @Test
