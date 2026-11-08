@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 public class LocalLoginTest {
     WebDriver driver;
-
+    
     @BeforeMethod
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
@@ -23,9 +23,9 @@ public class LocalLoginTest {
 
         driver = new ChromeDriver(options);
 
-        // Uses system path relative to root directory for cross-platform compatibility (Windows & Linux)
-        File htmlFile = new File(System.getProperty("user.dir"), "webpage/login.html");
-        driver.get(htmlFile.toURI().toString());
+        // Absolute file path resolving correctly on Windows (Eclipse) and Linux (GitHub Actions)
+        File file = new File(System.getProperty("user.dir") + File.separator + "webpage" + File.separator + "login.html");
+        driver.get(file.toURI().toString());
     }
 
     @Test
@@ -34,7 +34,6 @@ public class LocalLoginTest {
         driver.findElement(By.id("password")).sendKeys("12345");
         driver.findElement(By.id("loginButton")).click();
         String message = driver.findElement(By.id("message")).getText();
-        System.out.println("Message: " + message);
         Assert.assertEquals(message, "Login Successful");
     }
 
@@ -44,15 +43,12 @@ public class LocalLoginTest {
         driver.findElement(By.id("password")).sendKeys("wrong");
         driver.findElement(By.id("loginButton")).click();
         String message = driver.findElement(By.id("message")).getText();
-        System.out.println("Message: " + message);
         Assert.assertEquals(message, "Invalid Username or Password");
     }
 
     @Test
     public void checkBackgroundColor() {
-        String bgColor = driver.findElement(By.id("loginBox"))
-                .getCssValue("background-color");
-        System.out.println("Background Color: " + bgColor);
+        String bgColor = driver.findElement(By.id("loginBox")).getCssValue("background-color");
         Assert.assertEquals(bgColor, "rgba(173, 216, 230, 1)");
     }
 

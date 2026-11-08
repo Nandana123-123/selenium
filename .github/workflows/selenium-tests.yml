@@ -22,10 +22,9 @@ jobs:
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Verify Java and Chrome
-        run: |
-          java -version
-          google-chrome --version
-
       - name: Run Selenium tests
         run: mvn clean test
+
+      - name: Print failure report if tests fail
+        if: failure()
+        run: cat target/surefire-reports/*.txt || true
