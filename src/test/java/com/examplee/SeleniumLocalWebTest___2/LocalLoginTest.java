@@ -22,11 +22,10 @@ public class LocalLoginTest {
         options.addArguments("--window-size=1920,1080");
 
         driver = new ChromeDriver(options);
-        String page = new File("webpage/login.html")
-                .getAbsoluteFile()
-                .toURI()
-                .toString();
-        driver.get(page);
+        
+        // Dynamic absolute file path that works on both Windows (Eclipse) and Linux (GitHub Actions)
+        File file = new File(System.getProperty("user.dir") + "/webpage/login.html");
+        driver.get(file.toURI().toString());
     }
 
     @Test
